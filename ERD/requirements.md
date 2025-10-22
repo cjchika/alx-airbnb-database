@@ -1,0 +1,1 @@
+![Property Rental ERD](https://github.com/cjchika/alx-airbnb-database/blob/main/ERD/Property_Rental_ERD.png)
