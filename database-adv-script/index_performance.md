@@ -94,3 +94,5 @@ JOIN Users u ON b.user_id = u.user_id
 JOIN Properties p ON b.property_id = p.property_id
 WHERE u.email = 'john@example.com'
 ORDER BY b.created_at DESC;
+
+database_index.sql
