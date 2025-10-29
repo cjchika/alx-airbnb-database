@@ -1,3 +1,31 @@
+# 🧩 Airbnb Clone — Index Optimization Script
+
+**Author:** Chijioke Chika
+**Date:** 2025-10-22
+
+---
+
+## 🎯 Objective
+Continuously monitor and refine database performance by analyzing query execution plans and making schema adjustments.
+
+This script identifies high-usage columns and creates indexes to optimize performance for frequent queries in an **Airbnb Clone** database.
+
+---
+
+## 🧠 Overview
+
+Indexes are added to improve performance on:
+- User lookups and authentication
+- Property filtering and sorting
+- Booking retrievals and joins
+
+Each table’s indexing strategy targets **high-frequency query patterns** found during profiling with `EXPLAIN ANALYZE` or `SHOW PROFILE`.
+
+---
+
+## 🧱 SQL Script
+
+```sql
 -- ==============================================
 -- Airbnb Clone — Index Optimization Script
 -- ==============================================
@@ -16,7 +44,6 @@
 -- - Joining Users with Bookings via user_id
 -- - Sorting users by created_at for admin analytics
 
--- 🧱 Create indexes
 CREATE INDEX idx_users_email ON Users(email);
 CREATE INDEX idx_users_created_at ON Users(created_at);
 
@@ -48,9 +75,10 @@ CREATE INDEX idx_bookings_start_end_date ON Bookings(start_date, end_date);
 -- ==============================================
 -- 4️⃣ TESTING INDEX EFFECTIVENESS
 -- ==============================================
+-- Use EXPLAIN ANALYZE to compare query plans before and after indexing.
 
--- Before creating indexes, run:
--- EXPLAIN ANALYZE
+-- Before indexes:
+EXPLAIN ANALYZE
 SELECT b.booking_id, u.first_name, p.name AS property_name
 FROM Bookings b
 JOIN Users u ON b.user_id = u.user_id
@@ -58,8 +86,8 @@ JOIN Properties p ON b.property_id = p.property_id
 WHERE u.email = 'john@example.com'
 ORDER BY b.created_at DESC;
 
--- After creating indexes, run again:
--- EXPLAIN ANALYZE
+-- After indexes:
+EXPLAIN ANALYZE
 SELECT b.booking_id, u.first_name, p.name AS property_name
 FROM Bookings b
 JOIN Users u ON b.user_id = u.user_id
