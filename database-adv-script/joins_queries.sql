@@ -1,5 +1,5 @@
 -- ==============================================
--- Airbnb Clone — SQL Joins Practice
+-- Airbnb Clone — SQL Joins Practice (With ORDER BY)
 -- ==============================================
 -- Assumes database tables:
 -- users, properties, bookings, reviews
@@ -19,11 +19,15 @@ SELECT
     u.email
 FROM bookings b
 INNER JOIN users u
-    ON b.user_id = u.user_id;
+    ON b.user_id = u.user_id
+ORDER BY
+    b.start_date DESC,          -- Show latest bookings first
+    u.last_name ASC;            -- Secondary order by user name for readability
 
 -- ✅ Explanation:
 -- INNER JOIN returns only records where both bookings.user_id and users.user_id match.
 -- Users without bookings are excluded.
+-- ORDER BY ensures results are displayed with the most recent bookings first.
 
 -- ----------------------------------------------
 
@@ -38,11 +42,15 @@ SELECT
     r.comment
 FROM properties p
 LEFT JOIN reviews r
-    ON p.property_id = r.property_id;
+    ON p.property_id = r.property_id
+ORDER BY
+    p.location ASC,             -- Organize by property location
+    r.rating DESC NULLS LAST;   -- Highest-rated reviews first; unrated at bottom
 
 -- ✅ Explanation:
 -- LEFT JOIN returns all properties, whether or not a review exists.
 -- If a property has no review, review columns will show NULL.
+-- ORDER BY improves data readability by grouping by location and sorting by rating.
 
 -- ----------------------------------------------
 
@@ -58,10 +66,14 @@ SELECT
     b.status
 FROM users u
 FULL OUTER JOIN bookings b
-    ON u.user_id = b.user_id;
+    ON u.user_id = b.user_id
+ORDER BY
+    u.last_name ASC NULLS LAST,  -- Sort users alphabetically
+    b.start_date DESC NULLS LAST; -- Recent bookings shown first
 
 -- ✅ Explanation:
 -- FULL OUTER JOIN returns all records from both tables.
 -- Unmatched users (no bookings) and unmatched bookings (invalid user_id) are included.
--- Some databases like MySQL don’t support FULL OUTER JOIN directly;
--- In that case, simulate using UNION of LEFT and RIGHT JOIN.
+-- ORDER BY helps ensure consistent output, with unlinked records (NULLs) at the bottom.
+-- ⚠️ Note: Some databases (like MySQL) don’t support FULL OUTER JOIN.
+-- In that case, simulate with UNION of LEFT and RIGHT JOIN.
